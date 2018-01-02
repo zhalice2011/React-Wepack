@@ -1,0 +1,24 @@
+
+# ignore packages installed by npm
+node_modules
+
+# Temp files
+*.DS_Store
+*.tmp
+*.temp
+*.json
+
+# log files
+*.log
+
+#idea files
+.idea
+*.dat
+# sublime files
+*.sublime-project
+*.sublime-workspace
+
+*.pyc
+*.xlsx
+upload/*
+public/resources/video/*
