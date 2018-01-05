@@ -14,7 +14,7 @@ const config = {
     output:{
         filename:'[name].[hash].js', //输出的文件名
         path:path.join(__dirname,'../dist'), //文件存放路径
-        publicPath:'/public'//静态资源文件的引用路径  区分是静态资源还是api请求
+        publicPath:'/public/'//静态资源文件的引用路径  区分是静态资源还是api请求
     },
     module:{
         rules:[ //一个数组 数组里面可以配置很多的loader

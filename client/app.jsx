@@ -5,7 +5,7 @@ import React from 'react'
 export default class App extends React.Component{
     render() { //return html代码
         return (
-            <div>This is zhouli 2 3  jajjaajsad de app</div>
+            <div>"周达理"This 2 is zhouli 2 3  jajjaajsad de app</div>
         )
     }
 }
