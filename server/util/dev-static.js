@@ -34,9 +34,9 @@ serverCompiler.outputFileSystem = mfs //配置写入内存
 let serverBundle //注册一个变量
 //webpack里面的监听事件  文件变化
 serverCompiler.watch({},(err,status)=>{  //status是webpack打包的过程中输出的一些信息
-    if (err) throw err 
+    if (err) throw err
     status = status.toJson()
-    status.errors.forEach(err=>console.log(error(err)))  //打印错误信息
+    status.errors.forEach(err=>console.log(err))  //打印错误信息
     status.warnings.forEach(warn=>console.log(warn(warn))) //打印警告信息
     //获取bundle的路径  其实就是config里面配置的
     const bundlePath = path.join(
@@ -46,13 +46,13 @@ serverCompiler.watch({},(err,status)=>{  //status是webpack打包的过程中输
     console.log("周达理 bundlePath=",bundlePath)
     const bundle = mfs.readFileSync(bundlePath,'utf-8') //读出来的文件是一个string
     console.log("周达理 log=")
-    
+
     const m = new Module()
     m._compile(bundle,'server-entry.js')  //将上面的string编译成nodejs可以使用的module
     console.log("Module",Module)
-    serverBundle = m.exports.default   //由于是使用的require 
+    serverBundle = m.exports.default   //由于是使用的require
     console.log("serverBundle",serverBundle)
-    
+
 })
 
 module.exports = function(app){
@@ -60,7 +60,7 @@ module.exports = function(app){
     app.use('/public',proxy({
         target:'http://localhost:8888'
     }))
-    
+
     app.get('*',function(req,res){
         //1.获取template
         getTemplate().then(template=>{
@@ -68,9 +68,6 @@ module.exports = function(app){
             const content = ReactDomServer.renderToString(serverBundle)
             //console.log("content",content)
             res.send(template.replace('<!-- app -->',content))  //替换
-        })
-        .catch((error) => {
-            console.error(error);
         })
     })
 }
