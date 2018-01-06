@@ -7,7 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const isDev = process.env.NODE_ENV === 'development'
 
 const config = {
-    entry:{  
+    entry:{
         app:path.join(__dirname,'../client/app.js') //表示app.js作为项目打包的入口 然后根据app.js里面的依赖关系 弄成关系树 变成一个js文件
 
     },
@@ -19,9 +19,17 @@ const config = {
     module:{
         rules:[ //一个数组 数组里面可以配置很多的loader
             {
+                enforce:'pre', //表示执行真正的代码编译之前 我们要做执行的下面的test
+                test:/.(js|jsx)$/,
+                loader: 'eslint-loader', //表示以js和jsx结尾的文件都要使用eslintloader检查
+                exclude:[  //忽略掉下面的文件 不进行检测
+                    path.resolve(__dirname,'../node_modules')
+                ]
+            },
+            {
                 test: /\.jsx$/, //判断哪一种类型(以jsx结尾的)的文件,都使用下面的loader
                 loader: 'babel-loader' //babel是一个可以编译最新的js语法的工具.编译成es5语法
-                
+
             },
             {
                 test: /\.js$/, //判断哪一种类型(以jsx结尾的)的文件,都使用下面的loader
@@ -52,14 +60,14 @@ if (isDev){ //如果是开发环境 我们就给config加上一下配置
         port: '8888',
         contentBase:path.join(__dirname,'../dist'),
         hot:true,  //启动Hot module replacement
-        overlay:{ 
+        overlay:{
             errors:true //在编译的时候出现任何错误 就在网页显示黑色背景 和错误信息
         },
         publicPath:'/public',  //访问所有静态路径都加上/public
-        historyApiFallback:{  
+        historyApiFallback:{
             index:'/public/index.html'  //所有404的请求都返回这个指定index.html
-        }  
-   } 
+        }
+   }
    config.plugins.push(new webpack.HotModuleReplacementPlugin() )
 }
 module.exports = config

@@ -1,0 +1,17 @@
+{
+    "parser":"babel-eslint", //指定解析js代码的工具
+    "env":{
+        "browser":true, //代码是运行在浏览器中
+        "es6":true, //代码是es6的
+        "node":true
+    },
+    "parserOptions":{
+        "ecmaVersion":6, //es版本
+        "sourceType":"module"  //js调用方式 模块化
+    },
+    "extends":"airbnb",
+    "rules":{
+        "semi":[0], //0表示不去检测
+        "react/jsx-filename-extension":[0]
+    }
+}

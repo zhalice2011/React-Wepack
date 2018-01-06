@@ -48,7 +48,7 @@ serverCompiler.watch({},(err,status)=>{  //status是webpack打包的过程中输
     console.log("周达理 log=")
     
     const m = new Module()
-    m._compile(bundle,'server-entry.js')
+    m._compile(bundle,'server-entry.js')  //将上面的string编译成nodejs可以使用的module
     console.log("Module",Module)
     serverBundle = m.exports.default   //由于是使用的require 
     console.log("serverBundle",serverBundle)
