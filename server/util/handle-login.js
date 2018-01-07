@@ -6,10 +6,12 @@ const baseUrl = 'http://cnodejs.org/api/v1'
 
 // 登录接口
 router.post('/login',function(req,res,next){
+  console.log("login page",req.body.accessToken)
   axios.post(`${baseUrl}/accesstoken`, {
     accesstoken: req.body.accessToken
   })
     .then(resp => {
+      console.log("resp=",resp)
       if(resp.status === 200 && resp.data.success){  // 请求成功
         // 在req.session上面存放数据
         req.session.user = {
@@ -29,7 +31,7 @@ router.post('/login',function(req,res,next){
       if (err.response) { // 有返回但是报错了
         res.json({
           success: false,
-          data: err.response
+          data: err.response.data
         })
       } else {
         next(err)  // 把错误抛给全局的错误处理器来处理

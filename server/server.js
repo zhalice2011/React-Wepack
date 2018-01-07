@@ -25,8 +25,8 @@ app.use(session({
 app.use(favicon(path.join(__dirname,'../favicon.ico')))
 
 // 先处理api
-app.use('/api/user', require('./util/handle-login'))
-app.use('/api', require('./util/proxy'))
+app.use('/api/user', require('./util/handle-login'))  //登录
+app.use('/api', require('./util/proxy')) 
 
 
 

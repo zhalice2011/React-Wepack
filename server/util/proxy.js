@@ -1,22 +1,24 @@
 // 把所有请求cnode的接口都代理出去
 const axios = require('axios')
+const querystring = require('query-string')
 
 const baseUrl = 'http://cnodejs.org/api/v1'
 
 module.exports = function(req,res,next) {
-  console.log("/api")
   const path = req.path
   const user = req.session.user || {}
   const needAccessToken = req.query.needAccessToken
   //判断用户是否需要accesstoken
-  if (needAccessToken && user.accessToken) { //表示没有登录
+  if (needAccessToken && !user.accessToken) { //表示没有登录
     res.status(401).send({
       success: false,
       msg: 'need login'
     })
   }
 
-  const query = Object.assign({}, req.query)
+  const query = Object.assign({}, req.query, {
+    accesstoken: (needAccessToken && req.method === 'GET') ? user.accessToken : ''
+  })
   if (query.needAccessToken) delete query.needAccessToken  // 删除这个对象的needAccessToken属性
   //如果用户已经登录  发送请求cndodeqpi
   console.log("req.method",req.method)
@@ -26,11 +28,12 @@ module.exports = function(req,res,next) {
   axios(`${baseUrl}${path}`,{
     method: req.method,
     params: query,
-    data: Object.assign({}, req.body, {
-      accesstoken: user.accessToken
-    }),
+    // {'accesstoken': 'xxx'}  转化后 'accesstoken=xxx'
+    data: querystring.stringify(Object.assign({}, req.body, {
+      accesstoken: (needAccessToken && req.method === 'POST') ? user.accessToken : ''
+    })),
     headers: {
-      'Content-Type': 'application/x-www-form-urlencode' //请求头  使用formdata的方式
+      'Content-Type': 'application/x-www-form-urlencoded' //请求头  使用formdata的方式
     }
   }).then(resp => {
     console.log("请求会来的东西",resp)

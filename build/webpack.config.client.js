@@ -42,6 +42,9 @@ if (isDev){ //如果是开发环境 我们就给config加上一下配置
         publicPath:'/public',  //访问所有静态路径都加上/public
         historyApiFallback:{
             index:'/public/index.html'  //所有404的请求都返回这个指定index.html
+        },
+        proxy: {
+          '/api': 'http://localhost:3000'
         }
    }
    config.plugins.push(new webpack.HotModuleReplacementPlugin() )

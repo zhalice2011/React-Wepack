@@ -30,7 +30,7 @@ const mfs = new MemoryFs()  //创建一个内存
 //
 const serverCompiler = webpack(serverConfig) //有了webpack 和webpack的配置  我们就可以启动一个compiler
 serverCompiler.outputFileSystem = mfs //配置写入内存
-let serverBundle //注册一个变量
+let serverBundle, createStoreMap //注册一个变量
 //webpack里面的监听事件  文件变化
 serverCompiler.watch({},(err,status)=>{  //status是webpack打包的过程中输出的一些信息
     if (err) throw err
@@ -47,6 +47,7 @@ serverCompiler.watch({},(err,status)=>{  //status是webpack打包的过程中输
     const m = new Module()
     m._compile(bundle,'server-entry.js')  //将上面的string编译成nodejs可以使用的module
     serverBundle = m.exports.default   //由于是使用的require
+    createStoreMap = m.exports.createStoreMap 
 
 })
 
@@ -59,8 +60,11 @@ module.exports = function(app){
     app.get('*',function(req,res){
         //1.获取template
         getTemplate().then(template=>{
-            const content = ReactDomServer.renderToString(serverBundle)
-            res.send(template.replace('<!-- app -->',content))  //替换
+          const routerContext= {}
+          const app = serverBundle(createStoreMap(), routerContext, req.url)
+          
+          const content = ReactDomServer.renderToString(app)
+          res.send(template.replace('<!-- app -->',content))  //替换
         })
     })
 }
