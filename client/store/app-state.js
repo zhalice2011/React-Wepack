@@ -5,7 +5,6 @@ import {
   autorun,
   action,
 } from 'mobx'
-import { setInterval } from 'timers';
 
 export class AppState {
   @observable count = 0
@@ -29,8 +28,8 @@ autorun(() => {
   // console.log("autorun方法",appState.msg)
 })
 
-setInterval(() => {
-  appState.add()
-}, 1000)
+// setInterval(() => {
+//   appState.add()
+// }, 1000)
 
 export default appState

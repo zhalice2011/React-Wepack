@@ -14,7 +14,6 @@ const getTemplate = () => {  //通过这个方法实时拿到最新的Template�
     return new Promise((resolve,reject)=>{
         axios.get('http://localhost:8888/public/index.html')
             .then(res => {
-                console.log("周达理 我们请求到了哦,res")
                 resolve(res.data)
             })
             //.catch(reject)
@@ -43,15 +42,11 @@ serverCompiler.watch({},(err,status)=>{  //status是webpack打包的过程中输
         serverConfig.output.path,
         serverConfig.output.filename
     )
-    console.log("周达理 bundlePath=",bundlePath)
     const bundle = mfs.readFileSync(bundlePath,'utf-8') //读出来的文件是一个string
-    console.log("周达理 log=")
 
     const m = new Module()
     m._compile(bundle,'server-entry.js')  //将上面的string编译成nodejs可以使用的module
-    console.log("Module",Module)
     serverBundle = m.exports.default   //由于是使用的require
-    console.log("serverBundle",serverBundle)
 
 })
 
@@ -64,9 +59,7 @@ module.exports = function(app){
     app.get('*',function(req,res){
         //1.获取template
         getTemplate().then(template=>{
-            console.log("template")
             const content = ReactDomServer.renderToString(serverBundle)
-            //console.log("content",content)
             res.send(template.replace('<!-- app -->',content))  //替换
         })
     })
