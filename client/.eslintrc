@@ -12,6 +12,9 @@
     "extends":"airbnb",
     "rules":{
         "semi":[0], //0表示不去检测
-        "react/jsx-filename-extension":[0]
-    }
+        "react/jsx-filename-extension":[0],
+        "jsx-a11y/anchor-is-valid":[0],
+        "no-console":[0],
+        "react/require-default-props":[0]
+      }
 }

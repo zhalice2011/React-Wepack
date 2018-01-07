@@ -1,5 +1,12 @@
 import React from 'react'
+// import {
+//   observer,
+//   inject,
+// } from 'mobx-react'
+// import PropTypes from 'prop-types'
 
+// @inject('appState')
+// @observe
 export default class TopicDetail extends React.Component {
   componentDidMount() {
     // do something
@@ -7,8 +14,7 @@ export default class TopicDetail extends React.Component {
 
   render() {
     return (
-      <div>This is topic detail</div>
+      <div>This is index jsx</div>
     )
   }
 }
-
