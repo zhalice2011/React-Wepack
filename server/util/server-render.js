@@ -38,7 +38,7 @@ const serverRender = (bundle, template, req, res) => {
       const content = ReactDomServer.renderToString(app)
       const html = ejs.render(template, {
         appString: content,
-        initialState: serialize(state),  //通过这个插件把state转化成字符串
+        initialState: serialize(state),  //通过这个插件把state转化成字符串 同步我们的strore
         meta: helmet.meta.toString(),
         title: helmet.title.toString(),
         style: helmet.style.toString(),

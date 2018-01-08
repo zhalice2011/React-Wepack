@@ -65,29 +65,19 @@ module.exports = function(app){
     }))
 
     app.get('*',function(req, res, next){
+        // 判断serverBundle是否存在
+        if (!serverBundle) {
+          return res.send('waiting for compilem, refresh later')  //等他执行完成才能进行返回
+        }
         // 1.获取template
         getTemplate().then(template => {
           console.log("serverBundle",serverBundle)
           console.log("template",template)
-          setTimeout(function(){
+          //setTimeout(function(){
             return serverRender(serverBundle, template, req, res)
-     
-          },1000)
+          //},1000)
         }).catch(next)
     })
 }
 
-/*
-
-Nginx基本操作
-
-启动:sudo server nginx start
-
-停止:sudo server nginx stop
-
-先杀死然后再启动:sudo server nginx restart
-
-重载(启动后才能重载):sudo server nginx  reload
-
-*/
 
