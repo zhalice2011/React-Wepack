@@ -7,8 +7,12 @@ import {
 } from 'mobx'
 
 export default class AppStateClass {
-  @observable count = 0
-  @observable name = 'dali'
+  constructor({ count, name } = { count: 0, name: 'dali' }) {
+    this.count = count
+    this.name = name
+  }
+  @observable count
+  @observable name
   @computed get msg() {
     return `${this.name} say the count is ${this.count}`
   }
@@ -17,5 +21,11 @@ export default class AppStateClass {
   }
   @action changeName(name) {
     this.name = name
+  }
+  toJson() { // 拿到服务端的store渲染
+    return {
+      count: this.count,
+      name: this.name,
+    }
   }
 }
