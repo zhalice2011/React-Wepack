@@ -14,7 +14,9 @@ const getStoreState = (stores) => {
 }
 
 const serverRender = (bundle, template, req, res) => {
-  console.log("bundle",bundle)
+  console.log("serverRender中的 bundle",bundle)
+  console.log("serverRender中的 bundle.default=creatApp",bundle.default)
+  console.log("serverRender中的 bundle.createStoreMap=createStoreMap",bundle.default)
   return new Promise((resolve,reject) => {
     const createStoreMap = bundle.createStoreMap
     const creatApp = bundle.default

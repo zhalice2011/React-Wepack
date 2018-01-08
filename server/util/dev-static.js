@@ -53,9 +53,8 @@ serverCompiler.watch({},(err,status)=>{  //status是webpack打包的过程中输
     const bundle = mfs.readFileSync(bundlePath,'utf-8') //读出来的文件是一个string
 
     const m = getMoudleFromString(bundle, 'server-entry.js')
-
-    serverBundle = m.exports.default   //由于是使用的require
-
+    console.log("m.exports.default",m.exports.default)
+    serverBundle = m.exports   //由于是使用的require
 })
 
 
@@ -70,7 +69,10 @@ module.exports = function(app){
         getTemplate().then(template => {
           console.log("serverBundle",serverBundle)
           console.log("template",template)
-          return serverRender(serverBundle, template, req, res)
+          setTimeout(function(){
+            return serverRender(serverBundle, template, req, res)
+     
+          },1000)
         }).catch(next)
     })
 }
