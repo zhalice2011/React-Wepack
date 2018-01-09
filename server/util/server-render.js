@@ -5,6 +5,14 @@ const serialize = require('serialize-javascript')
 const ReactDomServer = require('react-dom/server')
 const Helmet = require('react-helmet').default
 
+//引入所有MuiTheme服务端渲染需要的东西
+const SheetsRegistry = require('react-jss').SheetsRegistry // export const 作为一个常量
+const create = require('jss').create  // export const 作为一个常量
+const preset = require('jss-preset-default').default  // export.default 作为默认的
+const createMuiTheme = require('material-ui/styles').createMuiTheme
+const createGenerateClassName = require('material-ui/styles/createGenerateClassName').createGenerateClassName
+const colors = require('material-ui/colors')
+
 //新建一个得到store的函数  
 const getStoreState = (stores) => {
   return Object.keys(stores).reduce((result, storeName) => {
@@ -22,8 +30,19 @@ const serverRender = (bundle, template, req, res) => {
     const creatApp = bundle.default
     const routerContext= {}
     const stores = createStoreMap()
-    
-    const app = creatApp(stores, routerContext, req.url)
+    //创建MuiThe
+    const sheetsRegistry = new SheetsRegistry()
+    const jss = create(preset())
+    jss.options.createGenerateClassName = createGenerateClassName
+    const theme = createMuiTheme({
+      palette: {
+        primary: colors.linghtBlue,
+        accend: colors.pink,
+        type: 'light'
+      }
+    })
+    //传给app
+    const app = creatApp(stores, routerContext, sheetsRegistry, jss, theme, req.url)
     
     asyncBootstrap(app).then(() => {
       if (routerContext.url) {
@@ -43,6 +62,7 @@ const serverRender = (bundle, template, req, res) => {
         title: helmet.title.toString(),
         style: helmet.style.toString(),
         link: helmet.link.toString(),
+        matreialCss: sheetsRegistry.toString(),//加入mtui的样式
       })
       res.send(html)
       //渲染成功之后就resolve

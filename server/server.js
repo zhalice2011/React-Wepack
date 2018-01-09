@@ -47,7 +47,7 @@ if(!isDev){ //不是开发环境  是正式环境
 
 //error处理的中间件
 app.use(function(error, req, res, next){
-  console.log(err)
+  console.log(error)
   res.status(500).send(error)
 })
 
