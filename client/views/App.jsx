@@ -1,23 +1,19 @@
 
-// 主入口
+// 前端主入口
 import React from 'react'
-import {
-  Link,
-} from 'react-router-dom'
+
 import Routes from '../config/router'
+// import MainAppBar from './layout/app-bar'
+
+import MainAppBar from './layout/app-bar'
 
 export default class App extends React.Component {
   componentDidMount() {
     // do something
   }
-
   render() {
     return [
-      <div key="banner">
-        <Link to="/">首页</Link>
-        <br />
-        <Link to="/detail">详情页</Link>
-      </div>,
+      <MainAppBar />,
       <Routes key="routes" />,
     ]
   }

@@ -29,6 +29,7 @@ const config = webpackMerge(baseConfig,{
 
 //localhost:8888/filename才能访问到所有文件
 if (isDev){ //如果是开发环境 我们就给config加上一下配置
+    config.devtool = '#cheap-module-eval-source-map'  //调试源代码  不是调试编译后的代码了
     config.entry = {
         app:[
             'react-hot-loader/patch',
@@ -38,7 +39,7 @@ if (isDev){ //如果是开发环境 我们就给config加上一下配置
     config.devServer = {
         host : '0.0.0.0', //所有的都能访问 ip或者localhost
         port: '8888',
-        contentBase:path.join(__dirname,'../dist'),
+        // contentBase:path.join(__dirname,'../dist'),
         hot:true,  //启动Hot module replacement
         overlay:{
             errors:true //在编译的时候出现任何错误 就在网页显示黑色背景 和错误信息
