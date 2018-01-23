@@ -13,7 +13,7 @@ export default class App extends React.Component {
   }
   render() {
     return [
-      <MainAppBar />,
+      <MainAppBar key="app-bar" />,
       <Routes key="routes" />,
     ]
   }

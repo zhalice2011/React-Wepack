@@ -9,7 +9,7 @@ import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles' // 引入�
 import { lightBlue, pink } from 'material-ui/colors' // 颜色选择
 
 import App from './views/App'
-import AppStateClass from './store/app-state' // 引入store
+import { AppState, TopicStore } from './store/store' // 引入store
 
 const theme = createMuiTheme({ // 创建material的主题
   palette: {
@@ -40,12 +40,15 @@ const createApp = (TheApp) => {
   return Main // return这个class
 }
 
+const appState = new AppState(initialState.appState)
+const topicStore = new TopicStore(initialState.topicStore)
+
 const root = document.getElementById('root') // 缓存变量 减少损耗
 // AppContainer 是热更新模块一定要放在最外面
 const render = (Component) => { // 定义一个渲染的函数 传入一个Component
   ReactDOM.hydrate(
     <AppContainer>
-      <Provider appState={new AppStateClass(initialState)}>
+      <Provider appState={appState} topicStore={topicStore}>
         <BrowserRouter>
           <MuiThemeProvider theme={theme}>
             <Component />

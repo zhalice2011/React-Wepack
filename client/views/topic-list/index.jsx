@@ -7,12 +7,24 @@ import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 // import Button from 'material-ui/Button';
 import Tabs, { Tab } from 'material-ui/Tabs';
+import List from 'material-ui/List';
+import { CircularProgress } from 'material-ui/Progress'; // loding组件
 
 import { AppState } from '../../store/app-state'
 import Container from '../layout/container'
 import TopicListItem from './list-item'
 
-@inject('appState') @observer
+// @inject 注入了之后 就可以在render中获取topicStore
+const initialState = window.__INITIAL_STATE__ || { } // eslint-disable-line
+
+
+@inject(stores => {
+  console.log('stores', stores)
+  return {
+    appState: stores.appState,
+    topicStore: stores.topicStore,
+  }
+}) @observer
 export default class TopicList extends React.Component {
   constructor(props) {
     super(props)
@@ -27,7 +39,9 @@ export default class TopicList extends React.Component {
     this.listItemClick = this.listItemClick.bind(this)
   }
   componentDidMount() {
-    // do something
+    console.log('componentDidMount  获取topicList的数据')
+    // 获取topicList的数据
+    this.props.topicStore.fetchTopics()
   }
 
   changeTab(e, index) { // 点击tab切换 e:envent事件
@@ -58,15 +72,12 @@ export default class TopicList extends React.Component {
       tabIndex,
       dali,
     } = this.state
-    // 设置假数据
-    const topic = {
-      title: 'title',
-      username: 'username',
-      reply_count: 20,
-      visit_count: 30,
-      creat_at: 'creat_at',
-      tab: 'share',
-    }
+    const {
+      topicStore,
+    } = this.props
+    const topicList = topicStore.topics
+    const syncingTopics = topicStore.syncing // false表示还没获取完 就可以使用loading组件
+
     return (
       <Container>
         <Helmet>
@@ -81,13 +92,34 @@ export default class TopicList extends React.Component {
           <Tab label="精品" />
           <Tab label="测试" />
         </Tabs>
-        <TopicListItem onClick={this.listItemClick} topic={topic} />
+        <List>
+          {
+            // 循环我们的Topic
+            topicList.map(topic => (
+              <TopicListItem
+                key={topic.id}
+                onClick={this.listItemClick}
+                topic={topic}
+              />
+            ))
+          }
+        </List>
+        {
+          syncingTopics ?
+          (
+            <div>
+              <CircularProgress color="accent" size={100} />
+            </div>
+          ) :
+          null
+        }
         <div>{dali}</div>
       </Container>
     )
   }
 }
 
-TopicList.propTypes = {
-  appState: PropTypes.instanceOf(AppState), // 表示appState是一个对象 并且是必须传入的对象
+TopicList.wrappedComponent.propTypes = {
+  appState: PropTypes.instanceOf(AppState).isRequired, // 表示appState是一个对象 并且是必须传入的对象
+  topicStore: PropTypes.object.isRequired, // 表示appState是一个对象 并且是必须传入的对象
 }

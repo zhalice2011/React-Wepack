@@ -4,7 +4,7 @@ import axios from 'axios'
 export default class TestApi extends React.Component {
   componentDidMount() {
     // do something
-  }
+  } 
 
   getTopics() {
     axios.get('/api/topics')

@@ -5,53 +5,65 @@ import ListItem from 'material-ui/List/ListItem'
 import ListItemAvatar from 'material-ui/List/ListItemAvatar' // 头像
 import ListItemText from 'material-ui/List/ListItemText' // 文字
 import Avatar from 'material-ui/Avatar' // 头像组件
-
+import { withStyles } from 'material-ui/styles'
 // import IconHome from 'material-ui-icons/Home'
 
-const Primary = ({ topic }) => {
-  console.log('Primary组件topic=', topic)
+import {
+  topicPrimaryStyle,
+  topicSecondaryStyles,
+} from './styles'
+
+
+const Primary = ({ classes, topic }) => {
+  // console.log('Primary组件topic=', topic)
   return (
-    <div>
-      <span>{topic.tab}</span>
-      <span>{topic.title}</span>
+    <div className={classes.root}>
+      <span className={classes.tab}>{topic.tab}</span>
+      <span className={classes.title}>{topic.title}</span>
     </div>
   )
 }
 
-const Secondary = ({ topic }) => {
-  console.log('Secondary组件topic=', topic)
+const Secondary = ({ classes, topic }) => {
+  // console.log('Secondary组件topic=', topic)
+  // console.log('Secondary组件classes=', classes)
   return (
-    <div>
-      <span>{topic.username}</span>
-      <span>
-        <span>{topic.reply_count}</span>
+    <span className={classes.root}>
+      <span className={classes.username}>{topic.author.loginname}</span>
+      <span className={classes.count}>
+        <span className={classes.accentColor}>{topic.reply_count}</span>
         <span>/</span>
         <span>{topic.visit_count}</span>
       </span>
-      <span>创建时间: {topic.creat_at}</span>
-    </div>
+      <span>创建时间: {topic.create_at}</span>
+    </span>
   )
 }
 
 
 Primary.propTypes = {
   topic: PropTypes.object.isRequired, // 必传
+  classes: PropTypes.object.isRequired, // 必传
 }
 Secondary.propTypes = {
   topic: PropTypes.object.isRequired, // 必传
+  classes: PropTypes.object.isRequired, // 必传
 }
+// 加了自定义样式的组件  StylePrimary
+const StylePrimary = withStyles(topicPrimaryStyle)(Primary)
+const StyleSecondary = withStyles(topicSecondaryStyles)(Secondary)
+
 
 const TopicListItem = ({ onClick, topic }) => {
-  console.log('防止eslint报错')
   return (
     <ListItem button onClick={onClick} >
       <ListItemAvatar>
         {/* <IconHome /> */}
-        <Avatar src={topic.image} />
+        <Avatar src={topic.author.avatar_url} />
       </ListItemAvatar>
       <ListItemText
-        primary={<Primary topic={topic} />} // 一个小组件
-        secondary={<Secondary topic={topic} />} // 一个小组件
+        primary={<StylePrimary topic={topic} />} // 一个小组件
+        secondary={<StyleSecondary topic={topic} />} // 一个小组件
       />
     </ListItem>
   )
