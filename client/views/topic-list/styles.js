@@ -1,6 +1,6 @@
 /* eslint-disable */
 export const topicPrimaryStyle = (theme) => {
-  console.log('topicPrimaryStyle', theme)
+  // console.log('topicPrimaryStyle', theme)
   return {
     root: {
       display: 'flex',
@@ -18,6 +18,9 @@ export const topicPrimaryStyle = (theme) => {
       borderRadius: 3,
       marginRight: 10,
       fontSize: '12px',
+    },
+    top: {
+      backgroundColor: theme.palette.accent[500],      
     },
   }
 }

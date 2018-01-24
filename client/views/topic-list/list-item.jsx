@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import cx from 'classnames'
 
 import ListItem from 'material-ui/List/ListItem'
 import ListItemAvatar from 'material-ui/List/ListItemAvatar' // 头像
@@ -7,6 +8,7 @@ import ListItemText from 'material-ui/List/ListItemText' // 文字
 import Avatar from 'material-ui/Avatar' // 头像组件
 import { withStyles } from 'material-ui/styles'
 // import IconHome from 'material-ui-icons/Home'
+import { tabs } from '../../util/variable-define'
 
 import {
   topicPrimaryStyle,
@@ -16,9 +18,15 @@ import {
 
 const Primary = ({ classes, topic }) => {
   // console.log('Primary组件topic=', topic)
+  // console.log('Primary组件tabs=', tabs)
+  // console.log('Primary组件tabs=', tabs["share"])
+  const classNames = cx({
+    [classes.tab]: true,
+    [classes.top]: topic.top,
+  })
   return (
     <div className={classes.root}>
-      <span className={classes.tab}>{topic.tab}</span>
+      <span className={classNames}>{topic.top ? '置顶' : tabs[topic.tab]}</span>
       <span className={classes.title}>{topic.title}</span>
     </div>
   )
@@ -70,7 +78,7 @@ const TopicListItem = ({ onClick, topic }) => {
 }
 
 TopicListItem.propTypes = {
-  onClick: PropTypes.func.isRequired, // 点击函数 必传
+  // onClick: PropTypes.func.isRequired, // 点击函数 必传
   topic: PropTypes.object.isRequired, // 数据必传
 }
 

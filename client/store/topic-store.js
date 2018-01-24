@@ -39,16 +39,18 @@ class TopicStore {
 
 
   // 获取topoc数据的操作
-  @action fetchTopics() {
-    console.log('topic-store   =>获取topoc数据的操作fetchTopics')
+  @action fetchTopics(tab) {
+    console.log('topic-store   =>获取topoc数据的操作fetchTopics tab=', tab)
     // 不知道获取的结果是正确与否 所以return 一个promise
     return new Promise((resolve, reject) => {
       this.syncing = true
       this.topics = []
       get('/topics', {
         mdrender: false,
+        tab,
       }).then((resp) => {
         if (resp.success) {
+          console.log('获取的数据resp.data', resp.data)
           // 如果成功 把获取的数据 加载到topics上面
           resp.data.forEach((topic) => {
             this.addTopic(topic)
