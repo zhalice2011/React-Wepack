@@ -5,27 +5,40 @@ import {
   // autorun,
   action,
 } from 'mobx'
+import { post } from '../util/http'
+
+let notifyId = 0
 
 export default class AppState {
   constructor({ count, name } = { count: 0, name: 'dali' }) {
     this.count = count
     this.name = name
   }
-  @observable count
-  @observable name
-  @computed get msg() {
-    return `${this.name} say the count is ${this.count}`
+  // 创建一个observable的对象
+  @observable user = {
+    isLogin: false, // 是否登录
+    info: {}, // 用户信息
   }
-  @action add() {
-    this.count += 1
+  // 创建一个action的对象
+  @action login(accessToken) { // 登录操作
+    return new Promise((resolve, reject) => {
+      post('accesstoken', {}, {
+        accesstoken: accessToken,
+      }).then((resp) => {
+        if (resp.success) {
+          this.user.isLogin = true
+          this.user.info = resp.data
+          resolve()
+        } else {
+          reject(resp)
+        }
+      }).catch(reject)
+    })
   }
-  @action changeName(name) {
-    this.name = name
-  }
-  toJson() { // 拿到服务端的store渲染
-    return {
-      count: this.count,
-      name: this.name,
-    }
+  // 好吧这个我也不清楚是啥
+  @action notify(config) {
+    config.id = notifyId
+    notifyId += 1
+    this.activeNotifications.push(config)
   }
 }

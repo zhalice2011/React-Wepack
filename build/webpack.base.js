@@ -28,6 +28,11 @@ module.exports ={
             exclude:[
                 path.join(__dirname,'../node_modules')
             ]
+        },
+        {
+          test: /\.(png|jpg)$/,  //判断哪一种类型(以jsx结尾的)的文件,都使用下面的loader
+          loader: 'url-loader?limit=8192' //babel是一个可以编译最新的js语法的工具.编译成es5语法
+
         }
     ]
   }

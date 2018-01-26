@@ -25,12 +25,12 @@ const queryString = (url, json) => {
 // 获取topic数据的方法
 export const get = (url, params) => {
   return new Promise((resolve, reject) => {
-    console.log('get方法传入的 url', url)
-    console.log('get方法传入的 params', params)
+    // console.log('get方法传入的 url', url)
+    // console.log('get方法传入的 params', params)
     // const newurl = parseUrl(url, params)
     // console.log('获取topic数据的方法 newurl1=>', newurl)
     const newurl2 = queryString(`${baseUrl}/${url}`, params)
-    console.log('获取topic数据的方法 newurl2=>', newurl2)
+    // console.log('获取topic数据的方法 newurl2=>', newurl2)
     axios.get(newurl2)
       .then((resp) => {
         const { data } = resp
@@ -55,9 +55,11 @@ export const get = (url, params) => {
 
 
 export const post = (url, params, data) => {
+  console.log('url, params, data', url, params, data)
   return new Promise((resolve, reject) => {
-    const newurl = queryString(url, params)
-    axios.get(newurl, data)
+    const newurl = queryString(`${baseUrl}/${url}`, params)
+    console.log('newurl', newurl)
+    axios.post(newurl, data)
       .then(resp => {
         const { data2 } = resp
         if (data2 && data2.success === true) {

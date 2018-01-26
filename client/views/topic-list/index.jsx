@@ -39,22 +39,23 @@ export default class TopicList extends React.Component {
 
     // 给点击事件绑定this
     this.changeTab = this.changeTab.bind(this)
+    this.listItemClick = this.listItemClick.bind(this)
   }
   componentDidMount() {
-    console.log('componentDidMount  获取topicList的数据')
+    // console.log('componentDidMount  获取topicList的数据')
     const tab = this.getTab()
     // 获取topicList的数据
     this.props.topicStore.fetchTopics(tab)
   }
   // 有新的props进来的时候的生命周期
   componentWillReceiveProps(nextProps) {
-    console.log('有新的props进来的时候的生命周期 nextProps=', nextProps)
+    // console.log('有新的props进来的时候的生命周期 nextProps=', nextProps)
     // 如何不等于就主动获取一遍数据
     if (nextProps.location.search !== this.props.location.search) {
       // 获取topicList的数据
-      console.log('nextProps.location.search', nextProps.location.search)
+      // console.log('nextProps.location.search', nextProps.location.search)
       const tab = this.getTab(nextProps.location.search)
-      console.log('tab', tab)
+      // console.log('tab', tab)
       this.props.topicStore.fetchTopics(tab)
     }
   }
@@ -84,14 +85,20 @@ export default class TopicList extends React.Component {
       })
     })
   }
+  // 点击irem展示详情页
+  listItemClick(topic) {
+    // 进行路由跳转到详情页
+    this.context.router.history.push(`/detail/${topic.id}`)
+  }
 
   render() {
     const {
       topicStore,
     } = this.props
-    // console.log('topicStore', topicStore)
+    // console.log('周达理topicStore', topicStore)
     const topicList = topicStore.topics
     const syncingTopics = topicStore.syncing // false表示还没获取完 就可以使用loading组件
+    // console.log('syncingTopics', syncingTopics)
     const tab = this.getTab() // 拿到要切换的tab值
 
     return (
@@ -115,6 +122,7 @@ export default class TopicList extends React.Component {
             topicList.map(topic => (
               <TopicListItem
                 key={topic.id}
+                onClick={() => this.listItemClick(topic)}
                 topic={topic}
               />
             ))
@@ -123,7 +131,13 @@ export default class TopicList extends React.Component {
         {
           syncingTopics ?
           (
-            <div>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-around',
+                padding: '40px 0',
+              }}
+            >
               <CircularProgress color="accent" size={100} />
             </div>
           ) :
@@ -135,7 +149,7 @@ export default class TopicList extends React.Component {
 }
 
 TopicList.wrappedComponent.propTypes = {
-  appState: PropTypes.instanceOf(AppState).isRequired, // 表示appState是一个对象 并且是必须传入的对象
+  appState: PropTypes.object.isRequired, // 表示appState是一个对象 并且是必须传入的对象
   topicStore: PropTypes.object.isRequired, // 表示appState是一个对象 并且是必须传入的对象
 }
 
