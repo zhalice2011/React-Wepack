@@ -13,7 +13,8 @@ import UserIcon from 'material-ui-icons/AccountCircle'
 // import Container from '../components/container'
 import Container from '../components/container'
 import userStyles from './styles/user-style'
-
+// import UserInfo from './info'
+// 使用inject从stores中获取数据 填入组件中
 @inject(stores => {
   return {
     user: stores.appState.user,
@@ -26,7 +27,9 @@ class User extends React.Component {
 
   render() {
     const { classes } = this.props
+    const { isLogin } = this.props.user
     const user = this.props.user.info || {}
+    // console.log('user的信息', user)
     return (
       <Container>
         <div className={classes.avatar}>
@@ -38,9 +41,10 @@ class User extends React.Component {
                 <UserIcon />
               </Avatar>
           }
-          <span className={classes.userName}>{user.loginName || '未登录'}</span>
+          <span className={classes.userName}>{user.loginname || '未登录'}</span>
         </div>
         {this.props.children}
+        {/* <UserInfo /> */}
       </Container>
     )
   }

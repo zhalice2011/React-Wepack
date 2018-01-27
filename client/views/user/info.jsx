@@ -15,10 +15,10 @@ import { withStyles } from 'material-ui/styles'
 import UserWrapper from './user'
 import infoStyles from './styles/user-info-style'
 
-const TopicItem = (({ topic }) => {
+const TopicItem = (({ topic, onClick }) => {
   return (
-    <ListItem>
-      <Avatar src={topic.author.avatar_url} />
+    <ListItem button>
+      <Avatar src={topic.author.avatar_url} onClick={onClick} />
       <ListItemText
         primary={topic.title}
         secondary={`最新回复：${topic.last_reply_at}`}
@@ -29,6 +29,7 @@ const TopicItem = (({ topic }) => {
 
 TopicItem.propTypes = {
   topic: PropTypes.object.isRequired,
+  onClick: PropTypes.func.isRequired,
 }
 
 @inject((stores) => {
@@ -41,16 +42,34 @@ class UserInfo extends React.Component {
   static contextTypes = {
     router: PropTypes.object,
   }
-
+  constructor(props) {
+    super(props)
+    this.goToTopic = this.goToTopic.bind(this)
+  }
   componentWillMount() {
-    this.props.appState.getUserDetail()
-    this.props.appState.getUserCollection()
+    if (!this.props.user.isLogin) { // 如果没有登录直接跳转到登录页面
+      this.context.router.history.replace('/user/login')
+    } else {
+      // console.log('如果登录了this.props=', this.props)
+      setTimeout(() => {
+        this.props.appState.getUserDetail(this.props.user.info.loginname)
+        this.props.appState.getUserCollection()
+      }, 200)
+    }
+  }
+
+  // 点击头像跳转到文章的链接
+  goToTopic(id) {
+    this.context.router.history.push(`/detail/${id}`)
   }
 
   render() {
     const classes = this.props.classes
-    const topics = this.props.user.detail.recent_topics
-    const replies = this.props.user.detail.recent_replies
+    const topics = this.props.user.detail.recentTopics || []
+    const replies = this.props.user.detail.recentReplices || []
+    // console.log(' this.props.user.detail', this.props.user.detail)
+    // console.log('replies', replies)
+    // console.log('topics', topics)
     const collections = this.props.user.collections.list
     return (
       <UserWrapper>
@@ -64,10 +83,16 @@ class UserInfo extends React.Component {
                 <List>
                   {
                     topics.length > 0 ?
-                      topics.map(topic => <TopicItem topic={topic} key={topic.id} />) :
-                      <Typography align="center">
-                        最近没有发布过话题
-                      </Typography>
+                  topics.map(topic => (
+                    <TopicItem
+                      topic={topic}
+                      key={topic.id}
+                      onClick={() => this.goToTopic(topic.id)}
+                    />
+                    )) :
+                  <Typography align="center">
+                    最近没有发布过话题
+                  </Typography>
                   }
                 </List>
               </Paper>
@@ -80,10 +105,16 @@ class UserInfo extends React.Component {
                 <List>
                   {
                     replies.length > 0 ?
-                      replies.map(topic => <TopicItem topic={topic} key={topic.id} />) :
-                      <Typography align="center">
-                        最近没有新的回复
-                      </Typography>
+                    replies.map(topic => (
+                      <TopicItem
+                        topic={topic}
+                        key={topic.id}
+                        onClick={() => this.goToTopic(topic.id)}
+                      />
+                      )) :
+                    <Typography align="center">
+                      最近没有新的回复
+                    </Typography>
                   }
                 </List>
               </Paper>
@@ -96,10 +127,16 @@ class UserInfo extends React.Component {
                 <List>
                   {
                     collections.length > 0 ?
-                      collections.map(topic => <TopicItem topic={topic} key={topic.id} />) :
-                      <Typography align="center">
-                        还么有收藏话题哦
-                      </Typography>
+                        collections.map(topic => (
+                          <TopicItem
+                            topic={topic}
+                            key={topic.id}
+                            onClick={() => this.goToTopic(topic.id)}
+                          />
+                        )) :
+                        <Typography align="center">
+                          还么有收藏话题哦
+                        </Typography>
                   }
                 </List>
               </Paper>
@@ -112,12 +149,13 @@ class UserInfo extends React.Component {
 }
 
 UserInfo.wrappedComponent.propTypes = {
+  user: PropTypes.object.isRequired,
   appState: PropTypes.object.isRequired,
 }
 
 UserInfo.propTypes = {
   classes: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
+  // user: PropTypes.object.isRequired,
 }
 
 export default withStyles(infoStyles)(UserInfo)

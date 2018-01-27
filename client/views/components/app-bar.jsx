@@ -62,7 +62,11 @@ class ButtonAppBar extends React.Component {
   }
 
   goToIndex() {
+    console.log('跳转到首页')
     this.context.router.history.push('/')
+  }
+  goToIndex2() {
+    console.log('达理')
   }
 
   render() {
@@ -75,7 +79,7 @@ class ButtonAppBar extends React.Component {
             <IconButton color="contrast" aria-label="Menu" onClick={this.goToIndex}>
               <HomeIcon />
             </IconButton>
-            <Typography type="title" color="inherit" className={classes.flex}>
+            <Typography type="title" onClick={this.goToIndex2} color="inherit" className={classes.flex}>
               JNode
             </Typography>
             {
@@ -86,7 +90,7 @@ class ButtonAppBar extends React.Component {
                 null
             }
             <Button color="contrast" onClick={this.goToUser}>
-              {user.isLogin ? user.info.loginName : '登录'}
+              {user.isLogin ? user.info.loginname : '登录'}
             </Button>
           </Toolbar>
         </AppBar>

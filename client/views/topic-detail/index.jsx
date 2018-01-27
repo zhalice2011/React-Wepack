@@ -201,7 +201,7 @@ class TopicDetail extends React.Component {
 
 TopicDetail.wrappedComponent.propTypes = {
   appState: PropTypes.object.isRequired,
-  topicStore: PropTypes.instanceOf(TopicStore).isRequired,
+  topicStore: PropTypes.object.isRequired,
 }
 
 TopicDetail.propTypes = {

@@ -42,7 +42,7 @@ class MainAppBar extends React.Component {
     // do something
   }
   onHomeIconClick() {
-
+    this.context.router.history.push('/')
   }
   createButtonClick() {
     

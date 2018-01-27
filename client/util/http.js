@@ -15,6 +15,7 @@ console.log('baseUrl=>', baseUrl)
 //   return `${baseUrl}/api/${url}?#${str.substr(0, str.len - 1)}`
 // }
 const queryString = (url, json) => {
+  json = json || {}
   const str = Object.keys(json).reduce((result, key) => {
     result += `${key}=${json[key]}&`
     return result
@@ -30,9 +31,10 @@ export const get = (url, params) => {
     // const newurl = parseUrl(url, params)
     // console.log('获取topic数据的方法 newurl1=>', newurl)
     const newurl2 = queryString(`${baseUrl}/${url}`, params)
-    // console.log('获取topic数据的方法 newurl2=>', newurl2)
+    console.log('获取topic数据的方法 newurl2=>', newurl2)
     axios.get(newurl2)
       .then((resp) => {
+        console.log('获取到的用户信息', resp)
         const { data } = resp
         if (data && data.success === true) {
           resolve(data)
@@ -57,12 +59,19 @@ export const get = (url, params) => {
 export const post = (url, params, data) => {
   console.log('url, params, data', url, params, data)
   return new Promise((resolve, reject) => {
-    const newurl = queryString(`${baseUrl}/${url}`, params)
+    let newurl = '';
+    if (params === {}) {
+      newurl = queryString(`${baseUrl}/${url}`, params)
+    } else {
+      newurl = `${baseUrl}/${url}`
+    }
     console.log('newurl', newurl)
     axios.post(newurl, data)
       .then(resp => {
-        const { data2 } = resp
+        console.log('请求肥来的数据', resp)
+        const data2 = resp.data
         if (data2 && data2.success === true) {
+          console.log('请求肥来的数据reslove')
           resolve(data2)
         } else {
           reject(data2)

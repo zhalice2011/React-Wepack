@@ -61,8 +61,11 @@ class UserLogin extends React.Component {
       helpText: '',
     })
     return this.props.appState.login(this.state.accesstoken)
-      .then(() => {
-        this.context.router.history.replace('/user/info') // replace 可以防止用户返回
+      .then((resp) => {
+        // console.log('进行登录 我到这里了哦 跳转到/user/info页面', resp)
+        if (resp.success) {
+          this.context.router.history.replace('/user/info') // replace 可以防止用户返
+        }
       })
       .catch(msg => {
         this.props.appState.notify({ message: msg })
